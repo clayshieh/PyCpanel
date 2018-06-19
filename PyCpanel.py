@@ -31,6 +31,7 @@ class TXTRecord(Record):
 		}
 		super(TXTRecord, self).__init__(domain, attrs)
 
+
 class ARecord(Record):
 	def __init__(self, domain, name, address, ttl):
 		attrs = {
@@ -41,6 +42,18 @@ class ARecord(Record):
 			"address": address
 		}
 		super(ARecord, self).__init__(domain, attrs)
+
+
+class CNAMERecord(Record):
+	def __init__(self, domain, name, address, ttl):
+		attrs = {
+			"class": "IN",
+			"type": "CNAME",
+			"name": name,
+			"ttl": ttl,
+			"cname": address
+		}
+		super(CNAMERecord, self).__init__(domain, attrs)
 
 
 class CpanelClient(object):
@@ -213,6 +226,14 @@ class CpanelClient(object):
 
 		a = ARecord(domain, name, address, ttl=ttl)
 		self.add_record(a)
+
+	def add_CNAME_record(self, domain, name, cname, ttl=14400):
+		"""
+		Easier wrapper function that creates and adds a CNAME Record object with specified parameters.
+		"""
+
+		c = CNAMERecord(domain, name, cname, ttl=ttl)
+		self.add_recrd(c)
 
 	def find_records_by_name(self, domain, name):
 		"""
